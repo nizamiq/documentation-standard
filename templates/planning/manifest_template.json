@@ -1,0 +1,43 @@
+{
+  "_comment": "Nizamiq Framework - Manifest Template",
+  "_version": "2.0.0",
+  "_description": "This is the master state file for the planning framework. Copy and customize for your project.",
+  
+  "project_name": "YOUR_PROJECT_NAME",
+  "version": "0.1.0",
+  "baseline_mapped": false,
+  "total_phases": 1,
+  "completed_phases": [],
+  "current_phase": "00",
+  
+  "active_context": {
+    "critical_files": [
+      "./docs/planning/AGENTS.md",
+      "./docs/planning/manifest.json",
+      "./docs/planning/phases/phase_00_init.yaml"
+    ],
+    "last_validated_step": null,
+    "technical_debt_log": "./docs/planning/DEBT.md",
+    "ecosystem_map": "./docs/architecture/ECOSYSTEM.md"
+  },
+  
+  "phase_map": {
+    "00": "./docs/planning/phases/phase_00_init.yaml"
+  },
+  
+  "ecosystem_context": {
+    "_comment": "Fill this section for multi-repo projects",
+    "masterplan": null,
+    "global_sequence": null,
+    "blocked_by": [],
+    "upstream_repos": [],
+    "downstream_repos": []
+  },
+  
+  "metadata": {
+    "created_at": "YYYY-MM-DD",
+    "created_by": "Global Ecosystem Architect",
+    "last_modified": "YYYY-MM-DD",
+    "last_modified_by": null
+  }
+}

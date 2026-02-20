@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NizamIQ UDS Frontmatter Schema",
+  "description": "Schema for validating the YAML frontmatter of all NizamIQ documentation.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "A unique, kebab-case identifier for the document.",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "description": "The human-readable title of the document.",
+      "minLength": 5
+    },
+    "description": {
+      "type": "string",
+      "description": "A one-sentence summary of the document's purpose.",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "tags": {
+      "type": "array",
+      "description": "A list of relevant keywords for search and discovery.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "status": {
+      "type": "string",
+      "description": "The current state of the document.",
+      "enum": ["DRAFT", "IN_REVIEW", "STABLE", "DEPRECATED"]
+    },
+    "last_audited": {
+      "type": "string",
+      "description": "The date of the last time the document was verified against its source.",
+      "format": "date"
+    },
+    "authoritative_source": {
+      "type": "string",
+      "description": "The path to the code or system this document describes. Use 'NA' for non-specific docs."
+    },
+    "version": {
+      "type": "string",
+      "description": "The semantic version of the document (MAJOR.MINOR.PATCH).",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "description",
+    "tags",
+    "status",
+    "last_audited",
+    "authoritative_source",
+    "version"
+  ]
+}

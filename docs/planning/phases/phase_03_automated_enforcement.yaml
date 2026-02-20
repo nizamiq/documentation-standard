@@ -1,0 +1,41 @@
+phase_id: "03"
+name: "Automated_Governance_Enforcement"
+dependencies: ["02"]
+status: "PENDING"
+
+# This phase will integrate the doc-lint reusable workflow into the
+# Golden Pipeline of all 13 NizamIQ repositories.
+
+steps:
+  - id: "03.1"
+    action: "Add the doc-lint reusable workflow call to the Golden Pipeline (nizamiq_standard.yml) in nizamiq-strategy"
+    logic_order: 1
+    status: "PENDING"
+    verification_method: "grep -l 'doc-lint' /path/to/nizamiq-strategy/.github/workflows/nizamiq_standard.yml"
+    proof_of_work: ""
+    observation: ""
+
+  - id: "03.2"
+    action: "Update branch protection rules in all 13 repos to require the doc-lint check to pass"
+    logic_order: 2
+    status: "PENDING"
+    verification_method: "python3 /path/to/bp_audit.py | grep doc-lint"
+    proof_of_work: ""
+    observation: ""
+
+  - id: "03.3"
+    action: "Run a final ecosystem-wide compliance check to confirm all repos are fully UDS-compliant"
+    logic_order: 3
+    status: "PENDING"
+    verification_method: "python3 /path/to/content_audit.py"
+    proof_of_work: ""
+    observation: ""
+
+quality_controls:
+  - control: "doc-lint is a required status check on main for all 13 repos"
+    check_command: "python3 /path/to/bp_audit.py | grep 'doc-lint: REQUIRED'"
+    result: "PENDING"
+
+metadata:
+  created_at: "2026-02-20"
+  created_by: "Manus AI"

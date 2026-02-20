@@ -1,0 +1,15 @@
+# This is the canonical template for UDS-compliant YAML frontmatter.
+# Every .md file in the docs/ directory MUST begin with this block.
+
+---
+id: unique-kebab-case-identifier-v1
+title: "Human-Readable Document Title"
+description: "A concise, one-sentence summary of the document's purpose."
+tags:
+  - relevant-tag-1
+  - relevant-tag-2
+status: DRAFT # Must be one of: DRAFT, IN_REVIEW, STABLE, DEPRECATED
+last_audited: YYYY-MM-DD # The date this document was last verified against its source
+authoritative_source: path/to/code/or/system # Use 'NA' for non-specific docs
+version: 1.0.0 # Semantic version (MAJOR.MINOR.PATCH)
+---

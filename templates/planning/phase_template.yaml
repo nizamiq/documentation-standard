@@ -1,0 +1,65 @@
+# Nizamiq Framework - Phase Template
+# Version: 2.0.0
+# Copy this template and customize for each phase
+
+phase_id: "XX"  # Two-digit identifier (00, 01, 02, etc.)
+name: "Phase_Name_Here"  # Descriptive name using underscores
+dependencies: []  # Array of phase IDs this depends on (e.g., ["01", "02"])
+
+# For multi-repo projects only
+ecosystem_dependency:
+  # - repo: "other-repo-name"
+  #   phase: "01"
+  #   required_status: "MERGED"
+
+status: "PENDING"  # PENDING | IN_PROGRESS | COMPLETED | BLOCKED
+
+steps:
+  - id: "XX.1"  # Format: phase_id.step_number
+    action: "Clear, explicit description of the atomic task"
+    logic_order: 1  # Execution sequence within the phase
+    status: "PENDING"  # PENDING | IN_PROGRESS | AWAITING_IMPLEMENTATION | COMPLETED | BLOCKED
+    verification_method: "terminal-executable-command"  # e.g., "npm run test -- file.test.ts"
+    proof_of_work: ""  # Filled by agent after verification
+    observation: ""  # Notes about execution
+    
+  - id: "XX.2"
+    action: "Second atomic task description"
+    logic_order: 2
+    status: "PENDING"
+    verification_method: "test -f ./path/to/file && echo EXISTS"
+    proof_of_work: ""
+    observation: ""
+    
+  - id: "XX.3"
+    action: "Third atomic task description"
+    logic_order: 3
+    status: "PENDING"
+    verification_method: "curl -I http://localhost:3000/api/endpoint"
+    proof_of_work: ""
+    observation: ""
+
+quality_controls:
+  - control: "All tests pass"
+    check_command: "npm run test"
+    result: "PENDING"  # PENDING | PASSED | FAILED
+    
+  - control: "Linting passes with no errors"
+    check_command: "npm run lint"
+    result: "PENDING"
+    
+  - control: "Type checking passes"
+    check_command: "npx tsc --noEmit"
+    result: "PENDING"
+    
+  - control: "Test coverage above threshold"
+    check_command: "npm run test:coverage | grep -E 'All files.*[8-9][0-9]|100'"
+    result: "PENDING"
+
+# Metadata (optional but recommended)
+metadata:
+  created_at: "YYYY-MM-DD"
+  created_by: "Planning Agent"
+  estimated_duration: "2 hours"
+  actual_duration: null
+  notes: ""
