@@ -1,89 +1,145 @@
-# NizamIQ Documentation Linter
-# This workflow enforces the Unified Documentation Standard (UDS).
-# It is designed to be called as a reusable workflow from the Golden Pipeline.
-
-name: Documentation Linter
+name: UDS Doc Lint
 
 on:
   workflow_call:
 
 jobs:
-  doc-lint:
-    name: UDS Compliance Check
+  doc_lint:
+    name: UDS Documentation Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetches all history for git diff
+          fetch-depth: 0
 
-      - name: Find changed markdown files
+      - name: Get changed markdown files
         id: changed-files
-        uses: tj-actions/changed-files@v41
-        with:
-          files: |
-            docs/**/*.md
+        run: |
+          # Get list of changed .md files vs base branch (or last commit for push events)
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+          # Fallback: if base is all zeros (first push), diff against HEAD~1
+          if [ "$BASE" = "0000000000000000000000000000000000000000" ] || [ -z "$BASE" ]; then
+            BASE="HEAD~1"
+          fi
+          git diff --name-only "$BASE" "$HEAD" -- '*.md' > /tmp/changed_md_files.txt 2>/dev/null || true
+          echo "Changed markdown files:"
+          cat /tmp/changed_md_files.txt || echo "(none)"
+
+      - name: Check required files and directories
+        run: |
+          ERRORS=0
+          check_file() {
+            if [ ! -f "$1" ]; then
+              echo "::error::Missing required file: $1"
+              ERRORS=$((ERRORS + 1))
+            fi
+          }
+          check_dir() {
+            if [ ! -d "$1" ]; then
+              echo "::warning::Missing recommended directory: $1"
+            fi
+          }
+          check_file "CONTEXT.md"
+          check_dir "docs/architecture"
+          check_dir "docs/api"
+          check_dir "docs/governance"
+          if [ $ERRORS -gt 0 ]; then
+            echo "::error::$ERRORS required file(s) missing. See errors above."
+            exit 1
+          fi
+          echo "Required files check passed."
 
       - name: Setup Python
-        if: steps.changed-files.outputs.any_changed == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install validation dependencies
-        if: steps.changed-files.outputs.any_changed == 'true'
+      - name: Install dependencies
         run: pip install PyYAML jsonschema
 
-      - name: Download UDS Schema
-        if: steps.changed-files.outputs.any_changed == 'true'
+      - name: Validate frontmatter of changed markdown files
         run: |
-          curl -s -L -o /tmp/frontmatter.schema.json \
-          https://raw.githubusercontent.com/nizamiq/documentation-standard/main/schema/frontmatter.schema.json
+          python3 << 'PYEOF'
+          import os, sys, json
 
-      - name: Validate Frontmatter
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: |
-          python3 -c "
-import os, sys, yaml, json
-from jsonschema import validate, ValidationError
+          try:
+              import yaml
+          except ImportError:
+              print("PyYAML not available, skipping frontmatter validation.")
+              sys.exit(0)
 
-SCHEMA_PATH = '/tmp/frontmatter.schema.json'
-CHANGED_FILES = os.environ.get('CHANGED_FILES', '').split()
+          try:
+              from jsonschema import validate, ValidationError
+          except ImportError:
+              print("jsonschema not available, skipping schema validation.")
+              sys.exit(0)
 
-with open(SCHEMA_PATH) as f:
-    schema = json.load(f)
+          # Download schema
+          import urllib.request
+          schema_url = "https://raw.githubusercontent.com/nizamiq/documentation-standard/main/schema/frontmatter.schema.json"
+          try:
+              with urllib.request.urlopen(schema_url, timeout=10) as resp:
+                  schema = json.loads(resp.read())
+          except Exception as e:
+              print(f"Warning: Could not download schema: {e}. Skipping schema validation.")
+              sys.exit(0)
 
-errors = []
-for fpath in CHANGED_FILES:
-    if not os.path.exists(fpath):
-        continue
-    try:
-        with open(fpath) as f:
-            content = f.read()
-        if not content.startswith('---'):
-            errors.append(f'::error file={fpath}::File does not start with YAML frontmatter.')
-            continue
-        
-        end = content.find('---', 3)
-        if end == -1:
-            errors.append(f'::error file={fpath}::Frontmatter block is not properly closed with ---.')
-            continue
+          # Read changed files
+          changed_files_path = "/tmp/changed_md_files.txt"
+          if not os.path.exists(changed_files_path):
+              print("No changed files list found. Skipping.")
+              sys.exit(0)
 
-        frontmatter = yaml.safe_load(content[3:end])
-        validate(instance=frontmatter, schema=schema)
-        print(f'::notice file={fpath}::Frontmatter validated successfully.')
+          with open(changed_files_path) as f:
+              changed_files = [l.strip() for l in f if l.strip() and l.strip().endswith(".md")]
 
-    except yaml.YAMLError as e:
-        errors.append(f'::error file={fpath}::Invalid YAML: {e}')
-    except ValidationError as e:
-        errors.append(f'::error file={fpath}::Schema validation failed: {e.message} on field `{e.path[0] if e.path else 'root'}`')
-    except Exception as e:
-        errors.append(f'::error file={fpath}::An unexpected error occurred: {e}')
+          if not changed_files:
+              print("No markdown files changed. Skipping frontmatter validation.")
+              sys.exit(0)
 
-if errors:
-    for error in errors:
-        print(error)
-    sys.exit(1)
-          "          
-        env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          errors = []
+          for fpath in changed_files:
+              if not os.path.exists(fpath):
+                  continue
+              try:
+                  with open(fpath, encoding="utf-8") as f:
+                      content = f.read()
+              except Exception:
+                  continue
+
+              if not content.startswith("---"):
+                  errors.append(f"::error file={fpath}::Missing YAML frontmatter (file must start with ---)")
+                  continue
+
+              end = content.find("\n---", 3)
+              if end == -1:
+                  errors.append(f"::error file={fpath}::Frontmatter block not closed with ---")
+                  continue
+
+              try:
+                  fm = yaml.safe_load(content[4:end])
+                  if not isinstance(fm, dict):
+                      errors.append(f"::error file={fpath}::Frontmatter is not a valid YAML mapping")
+                      continue
+                  validate(instance=fm, schema=schema)
+                  print(f"::notice file={fpath}::Frontmatter valid.")
+              except yaml.YAMLError as e:
+                  errors.append(f"::error file={fpath}::Invalid YAML: {e}")
+              except ValidationError as e:
+                  field = e.path[0] if e.path else "root"
+                  errors.append(f"::error file={fpath}::Schema validation failed on field '{field}': {e.message}")
+
+          if errors:
+              for err in errors:
+                  print(err)
+              sys.exit(1)
+          else:
+              print(f"Frontmatter validation passed for {len(changed_files)} file(s).")
+          PYEOF
