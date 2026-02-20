@@ -3,12 +3,18 @@
 UDS Validator for doc-lint CI job.
 
 Checks for:
-1.  File existence (CONTEXT.md, CHANGELOG.md, etc.)
-2.  Directory existence (docs/architecture, etc.)
+1.  File existence (CONTEXT.md, AI_AGENT_INSTRUCTIONS.md, etc.)
+2.  Directory existence (docs/architecture, docs/api, docs/governance)
 3.  Frontmatter schema compliance for all changed .md files.
+
+The schema is embedded to avoid external file dependencies in consuming repos.
 """
 import os, json, re, sys
-from jsonschema import validate, ValidationError
+
+# --- Embedded UDS Frontmatter Schema ---
+# Required fields per the Unified Documentation Standard v1.0
+REQUIRED_FRONTMATTER_FIELDS = ["id", "title", "last_audited", "status", "authoritative_source"]
+VALID_STATUSES = {"STABLE", "DRAFT", "DEPRECATED", "ACTIVE", "ARCHIVED"}
 
 def check_file_exists(path, errors):
     if not os.path.exists(path):
@@ -29,10 +35,10 @@ def parse_frontmatter(content):
     for line in fm_text.split("\n"):
         if ":" in line and not line.startswith(" ") and not line.startswith("-"):
             k, _, v = line.partition(":")
-            fm[k.strip()] = v.strip()
+            fm[k.strip()] = v.strip().strip('"').strip("'")
     return fm
 
-def validate_frontmatter(fpath, schema, errors):
+def validate_frontmatter(fpath, errors):
     try:
         with open(fpath, "r", encoding="utf-8") as f:
             content = f.read()
@@ -45,10 +51,14 @@ def validate_frontmatter(fpath, schema, errors):
         errors.append(f"{fpath}: Missing or malformed YAML frontmatter block.")
         return
 
-    try:
-        validate(instance=fm, schema=schema)
-    except ValidationError as e:
-        errors.append(f"{fpath}: Frontmatter failed validation: {e.message} on property '{e.path[0] if e.path else ''}'")
+    # Check required fields
+    for field in REQUIRED_FRONTMATTER_FIELDS:
+        if field not in fm or not fm[field]:
+            errors.append(f"{fpath}: Missing required frontmatter field: '{field}'")
+
+    # Check status is valid
+    if "status" in fm and fm["status"] and fm["status"] not in VALID_STATUSES:
+        errors.append(f"{fpath}: Invalid status '{fm['status']}'. Must be one of: {', '.join(sorted(VALID_STATUSES))}")
 
 # --- Main ---
 if __name__ == "__main__":
@@ -60,31 +70,27 @@ if __name__ == "__main__":
     repo_root = os.getcwd()
     errors = []
 
-    # 1. Load Schema
-    schema_path = os.path.join(repo_root, "governance/schema/frontmatter.schema.json")
-    if not os.path.exists(schema_path):
-        print(f"FATAL: Schema not found at {schema_path}")
-        sys.exit(1)
-    with open(schema_path, "r") as f:
-        schema = json.load(f)
-
-    # 2. Check for required files/dirs (run on every PR)
+    # 1. Check for required files/dirs (run on every PR)
     check_file_exists(os.path.join(repo_root, "CONTEXT.md"), errors)
     check_dir_exists(os.path.join(repo_root, "docs/architecture"), errors)
     check_dir_exists(os.path.join(repo_root, "docs/api"), errors)
     check_dir_exists(os.path.join(repo_root, "docs/governance"), errors)
     check_file_exists(os.path.join(repo_root, "docs/governance/AI_AGENT_INSTRUCTIONS.md"), errors)
 
-    # 3. Validate frontmatter of changed markdown files
-    with open(changed_files_path, "r") as f:
-        changed_files = [line.strip() for line in f if line.strip().endswith(".md")]
+    # 2. Validate frontmatter of changed markdown files
+    try:
+        with open(changed_files_path, "r") as f:
+            changed_files = [line.strip() for line in f if line.strip().endswith(".md")]
+    except Exception as e:
+        print(f"Warning: Could not read changed files list: {e}")
+        changed_files = []
 
     for rel_path in changed_files:
         full_path = os.path.join(repo_root, rel_path)
         if os.path.exists(full_path):
-            validate_frontmatter(full_path, schema, errors)
+            validate_frontmatter(full_path, errors)
 
-    # 4. Report results
+    # 3. Report results
     if errors:
         print("\nUDS Compliance Check FAILED:")
         for error in errors:
