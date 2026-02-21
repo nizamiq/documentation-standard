@@ -10,7 +10,6 @@ status: STABLE
 last_audited: "2026-02-21"
 authoritative_source: "docs/governance/AI_AGENT_INSTRUCTIONS.md"
 version: 1.0.0
-tags: [docs, documentation, governance]
 ---
 
 # AI Agent Instructions — documentation-standard
