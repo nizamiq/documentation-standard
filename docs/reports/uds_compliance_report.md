@@ -4,7 +4,8 @@ title: UDS Ecosystem-Wide Compliance Report — 2026-02-21
 last_audited: "2026-02-21"
 status: ACTIVE
 authoritative_source: docs/reports/uds_compliance_report.md
----
+description: "Ecosystem-wide UDS compliance audit report — frontmatter validation scores across all 13 active NizamIQ repositories."
+----
 
 # UDS Ecosystem-Wide Compliance Report
 **Generated:** 2026-02-21 16:16 UTC  
