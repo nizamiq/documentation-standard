@@ -1,3 +1,10 @@
+---
+title: CHANGELOG Template
+description: "Canonical template for CHANGELOG.md"
+last_audited: "2026-02-20"
+tags: ["template", "changelog"]
+---
+
 <!--
 This is the canonical template for CHANGELOG.md. 
 Every document in the docs/ directory should have a corresponding changelog.

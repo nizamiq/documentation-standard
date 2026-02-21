@@ -1,3 +1,10 @@
+---
+title: NizamIQ Unified Documentation Standard (UDS)
+description: "The canonical Unified Documentation Standard (UDS) for all NizamIQ repositories. Contains the official standard, templates, validation schema, and governance documents."
+last_audited: "2026-02-20"
+tags: ["documentation", "governance", "standard"]
+---
+
 # NizamIQ Unified Documentation Standard (UDS)
 
 **STATUS:** DRAFT

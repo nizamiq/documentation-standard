@@ -6,6 +6,7 @@ last_audited: '2026-02-20'
 authoritative_source: docs/planning
 status: DRAFT
 version: 1.0.0
+tags: ["technical-debt", "planning"]
 ---
 
 # Technical Debt Log

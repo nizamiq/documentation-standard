@@ -1,3 +1,10 @@
+---
+title: CONTEXT.md
+description: "Provides context for the AI agent."
+last_audited: "2026-02-20"
+tags: ["documentation", "governance"]
+---
+
 # CONTEXT.md
 
 **LAST UPDATED:** 2026-02-20

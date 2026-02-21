@@ -4,7 +4,7 @@ title: Agent Governance Inheritance Protocol (AGIP)
 description: The canonical protocol ensuring all spawned AI agents inherit and enforce the full NizamIQ ecosystem governance standards from birth.
 tags: ["protocol", "governance", "agentic", "bootstrap"]
 status: DRAFT
-last_audited: 2026-02-20
+last_audited: "2026-02-20"
 authoritative_source: standard/AGIP.md
 version: 1.0.0
 ---

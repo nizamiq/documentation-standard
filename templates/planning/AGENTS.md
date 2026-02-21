@@ -1,12 +1,9 @@
 ---
-id: agents_memory
-title: Agent Context & State
-description: Active memory file for AI agent session continuity
-last_audited: '2026-02-20'
-authoritative_source: docs/planning/AGENTS.md
-status: DRAFT
-version: 2.0.0
-tags: ["planning", "agent", "context"]
+id: agents-template
+title: AGENTS.md Template
+description: "Canonical template for AGENTS.md, the AI agent objective and context file."
+tags: ["template", "planning", "agent"]
+last_audited: "2026-02-20"
 ---
 
 # Agent Context & State
