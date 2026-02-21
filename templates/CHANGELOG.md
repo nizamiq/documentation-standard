@@ -6,7 +6,7 @@ tags: ["template", "changelog"]
 id: changelog
 status: DRAFT
 authoritative_source: "templates/CHANGELOG.md"
-version: "1.0"
+version: "1.0.0"
 ---
 
 <!--
