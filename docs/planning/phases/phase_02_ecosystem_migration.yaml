@@ -1,70 +1,76 @@
+---
+id: documentation-standard-phase-02-ecosystem-migration
+title: "Phase 02: Ecosystem-Wide UDS Migration"
+description: "Migrate all 14 NizamIQ repositories to full UDS compliance: scaffold missing docs directories, copy canonical governance files, update CONTEXT.md files, and validate all frontmatter."
+last_audited: "2026-02-21"
+status: PENDING
+authoritative_source: docs/planning/phases/phase_02_ecosystem_migration.yaml
+version: 1.1.0
+tags: ["documentation-standard", "uds", "ecosystem-migration", "compliance", "frontmatter"]
+---
+
 phase_id: "02"
-name: "Ecosystem_Wide_Migration"
+name: "Ecosystem_Wide_UDS_Migration"
+description: >
+  Migrate all 14 NizamIQ repositories to full UDS compliance: scaffold missing docs
+  directories, copy canonical governance files, update CONTEXT.md files, and validate
+  all frontmatter. This phase brings the entire ecosystem to a consistent documentation
+  standard, enabling reliable AI agent navigation across all repos.
 dependencies: ["01"]
-status: "PENDING"
-
-# This phase will be executed by the Ecosystem Migration Agent.
-# It will iterate through all 13 NizamIQ repositories and bring them
-# into compliance with the UDS defined in Phase 01.
-
+status: PENDING
 steps:
   - id: "02.1"
-    action: "Scaffold missing docs/architecture, docs/api, docs/governance directories in all repos missing them (Fireside, KubeClaw, nizamiq.com, sputnik-gateway)"
+    action: "Scaffold missing docs/architecture, docs/api, docs/governance directories in all repos missing them"
     logic_order: 1
-    status: "PENDING"
-    verification_method: "ls /path/to/repo/docs/architecture /path/to/repo/docs/api /path/to/repo/docs/governance"
+    status: PENDING
+    verification_method: "for repo in Fireside KubeClaw nizamiq.com zitadel-config; do ls repos/$repo/docs/architecture repos/$repo/docs/api repos/$repo/docs/governance 2>/dev/null && echo OK || echo MISSING; done"
     proof_of_work: ""
-    observation: ""
+    observation: "Fireside, KubeClaw, nizamiq.com, and zitadel-config are missing some docs subdirectories."
 
   - id: "02.2"
-    action: "Copy canonical AI_AGENT_INSTRUCTIONS.md and ci_cd_standards.md into docs/governance/ for all repos missing them (gateway-config, sputnik-gateway)"
+    action: "Copy canonical AI_AGENT_INSTRUCTIONS.md and ci_cd_standards.md into docs/governance/ for all repos missing them"
     logic_order: 2
-    status: "PENDING"
-    verification_method: "test -f /path/to/repo/docs/governance/AI_AGENT_INSTRUCTIONS.md && echo EXISTS"
+    status: PENDING
+    verification_method: "for repo in gateway-config zitadel-config; do test -f repos/$repo/docs/governance/AI_AGENT_INSTRUCTIONS.md && echo OK || echo MISSING; done"
     proof_of_work: ""
-    observation: ""
+    observation: "gateway-config and zitadel-config are missing governance files."
 
   - id: "02.3"
-    action: "Create or update CONTEXT.md in all repos, ensuring all four required sections are present (currently 9 repos missing the CI/CD section)"
+    action: "Update CONTEXT.md in all repos to ensure all four required sections are present (System Architecture, Dependency Map, CI/CD, Scope)"
     logic_order: 3
-    status: "PENDING"
-    verification_method: "grep -l 'CI/CD' /path/to/repo/CONTEXT.md"
+    status: PENDING
+    verification_method: "for repo in $(ls repos/); do grep -l 'CI/CD' repos/$repo/CONTEXT.md 2>/dev/null && echo OK || echo MISSING; done"
     proof_of_work: ""
-    observation: ""
+    observation: "Several repos added after Protocol 5 are missing the CI/CD section in CONTEXT.md."
 
   - id: "02.4"
-    action: "Migrate all strategy-style bold-header documents to UDS YAML frontmatter format"
+    action: "Add UDS frontmatter to all markdown files in docs/ that are missing it"
     logic_order: 4
-    status: "PENDING"
-    verification_method: "python3 /path/to/frontmatter_audit.py"
+    status: PENDING
+    verification_method: "python3 scripts/frontmatter_audit.py --all-repos"
     proof_of_work: ""
-    observation: ""
+    observation: "Ongoing: new files added by Protocol 5 PRs triggered UDS lint failures. Automated fix script exists at /tmp/fix_preflight_fm.py."
 
   - id: "02.5"
-    action: "Create CHANGELOG.md for all documents in docs/ that do not have one"
+    action: "Add AGENTS.md to all repos missing it (zitadel-config)"
     logic_order: 5
-    status: "PENDING"
-    verification_method: "find /path/to/repo/docs -name 'CHANGELOG.md' | wc -l"
+    status: PENDING
+    verification_method: "test -f repos/zitadel-config/docs/planning/AGENTS.md && echo EXISTS"
     proof_of_work: ""
-    observation: ""
+    observation: "zitadel-config was added after the initial AGENTS.md rollout."
 
   - id: "02.6"
-    action: "Create CONTEXT.md for sputnik-gateway (the only repo currently missing it)"
+    action: "Add .github/workflows/nizamiq_standard.yml to zitadel-config"
     logic_order: 6
-    status: "PENDING"
-    verification_method: "test -f /path/to/sputnik-gateway/CONTEXT.md && echo EXISTS"
+    status: PENDING
+    verification_method: "test -f repos/zitadel-config/.github/workflows/nizamiq_standard.yml && echo EXISTS"
     proof_of_work: ""
-    observation: ""
+    observation: "zitadel-config has no CI workflows. The standard doc-lint workflow must be added."
 
 quality_controls:
-  - control: "All 13 repos have CONTEXT.md with all 4 required sections"
-    check_command: "python3 /path/to/context_audit.py"
-    result: "PENDING"
-
-  - control: "All docs/ markdown files pass UDS frontmatter validation"
-    check_command: "python3 /path/to/frontmatter_validator.py"
-    result: "PENDING"
-
-metadata:
-  created_at: "2026-02-20"
-  created_by: "Manus AI"
+  - control: "All 14 repos pass UDS lint on main"
+    check_command: "CI validates on push to each repo"
+    result: PENDING
+  - control: "All CONTEXT.md files have four required sections"
+    check_command: "python3 scripts/context_audit.py --all-repos"
+    result: PENDING
