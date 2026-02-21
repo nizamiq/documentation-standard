@@ -11,6 +11,27 @@ tags: ["planning", "agent", "context"]
 
 # Agent Context & State
 
+---
+
+## ⚠️ MANDATORY SCOPE CHECK — READ BEFORE ACTING
+
+> **This repository is part of the NizamIQ Masterplan execution scope.**
+>
+> Before performing any work in any session, you **must** verify that the repository you are working on is listed as **in-scope** in the canonical ecosystem scope document:
+>
+> - **Human-readable:** [`nizamiq-strategy/SCOPE.md`](https://github.com/nizamiq/nizamiq-strategy/blob/main/SCOPE.md)
+> - **Machine-readable:** [`nizamiq-strategy/ECOSYSTEM.json`](https://github.com/nizamiq/nizamiq-strategy/blob/main/ECOSYSTEM.json)
+>
+> **If a repository is not listed as `in_scope` in `ECOSYSTEM.json`, do not perform any work on it.** Treat it as out of scope by default.
+>
+> The current in-scope repositories are: `nizamiq-strategy`, `nizamiq.com`, `nizamiq-methodology`, `anchorlink`, `meridian`, `Fireside`, `Cornerstone`, `KubeClaw`, `Recce`, `Atlas`, `Aegis`, `gateway-config`, `documentation-standard`.
+>
+> Explicitly **out of scope**: `sputnik-gateway` and any repository not listed above.
+
+---
+
+
+
 ## MANDATORY FIRST ACTION: AGIP Bootstrap
 
 > **Before reading anything else, you must execute the Agent Governance Inheritance Protocol (AGIP) bootstrap.** This is non-negotiable.
