@@ -2,7 +2,7 @@
 id: doc-std-agents-memory
 title: Agent Context & State
 description: Active memory file for AI agent session continuity in the documentation-standard repository
-last_audited: '2026-02-20'
+last_audited: "2026-02-20"
 authoritative_source: docs/planning
 status: DRAFT
 version: 1.0.0

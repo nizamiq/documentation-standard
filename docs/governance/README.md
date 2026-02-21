@@ -10,6 +10,7 @@ status: STABLE
 last_audited: "2026-02-21"
 authoritative_source: "docs/governance/README.md"
 version: 1.0.0
+tags: [docs, documentation, governance]
 ---
 
 # Governance

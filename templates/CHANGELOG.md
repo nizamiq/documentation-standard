@@ -3,6 +3,10 @@ title: CHANGELOG Template
 description: "Canonical template for CHANGELOG.md"
 last_audited: "2026-02-20"
 tags: ["template", "changelog"]
+id: changelog
+status: DRAFT
+authoritative_source: "templates/CHANGELOG.md"
+version: "1.0"
 ---
 
 <!--

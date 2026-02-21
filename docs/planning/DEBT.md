@@ -2,7 +2,7 @@
 id: doc-std-debt-log
 title: Technical Debt Log
 description: Log of known technical debt, deferred decisions, and open issues for the documentation-standard repository
-last_audited: '2026-02-20'
+last_audited: "2026-02-20"
 authoritative_source: docs/planning
 status: DRAFT
 version: 1.0.0
