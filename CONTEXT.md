@@ -1,10 +1,13 @@
 ---
-title: CONTEXT.md
+id: ecosystem-contextmd
+title: "CONTEXT.md"
 description: "Provides context for the AI agent."
-last_audited: "2026-02-20"
 tags: ["documentation", "governance"]
+status: STABLE
+last_audited: "2026-02-20"
+authoritative_source: "CONTEXT.md"
+version: 1.0.0
 ---
-
 # CONTEXT.md
 
 **LAST UPDATED:** 2026-02-20

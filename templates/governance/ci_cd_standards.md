@@ -1,10 +1,13 @@
 ---
-title: CI/CD Standards Template
+id: governance-cicdstandardsmd
+title: "CI/CD Standards Template"
 description: "Canonical template for ci_cd_standards.md"
-last_audited: "2026-02-20"
 tags: ["template", "governance", "ci-cd"]
+status: STABLE
+last_audited: "2026-02-20"
+authoritative_source: "templates/governance/ci_cd_standards.md"
+version: 1.0.0
 ---
-
 # CI/CD Golden Pipeline Standard
 
 **VERSION:** 1.0.0

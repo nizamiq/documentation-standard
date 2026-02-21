@@ -1,11 +1,13 @@
 ---
 id: agents-template
-title: AGENTS.md Template
+title: "AGENTS.md Template"
 description: "Canonical template for AGENTS.md, the AI agent objective and context file."
 tags: ["template", "planning", "agent"]
+status: STABLE
 last_audited: "2026-02-20"
+authoritative_source: "templates/planning/AGENTS.md"
+version: 1.0.0
 ---
-
 # Agent Context & State
 
 ---

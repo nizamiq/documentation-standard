@@ -1,10 +1,13 @@
 ---
-title: CONTEXT.md Template
+id: templates-contextmd
+title: "CONTEXT.md Template"
 description: "Canonical template for CONTEXT.md"
-last_audited: "2026-02-20"
 tags: ["template", "context"]
+status: STABLE
+last_audited: "2026-02-20"
+authoritative_source: "templates/CONTEXT.md"
+version: 1.0.0
 ---
-
 <!--
 This is the canonical template for CONTEXT.md. 
 When scaffolding a new repository, an agent will auto-populate this file.

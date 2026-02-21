@@ -1,10 +1,13 @@
 ---
-title: AI Agent Instructions Template
+id: governance-aiagentinstructionsmd
+title: "AI Agent Instructions Template"
 description: "Canonical template for AI_AGENT_INSTRUCTIONS.md"
-last_audited: "2026-02-20"
 tags: ["template", "governance", "agent"]
+status: STABLE
+last_audited: "2026-02-20"
+authoritative_source: "templates/governance/AI_AGENT_INSTRUCTIONS.md"
+version: 1.0.0
 ---
-
 # AI Agent Instructions
 
 **VERSION:** 2.0.0

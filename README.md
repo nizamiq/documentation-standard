@@ -1,10 +1,13 @@
 ---
-title: NizamIQ Unified Documentation Standard (UDS)
+id: ecosystem-readmemd
+title: "NizamIQ Unified Documentation Standard (UDS)"
 description: "The canonical Unified Documentation Standard (UDS) for all NizamIQ repositories. Contains the official standard, templates, validation schema, and governance documents."
-last_audited: "2026-02-20"
 tags: ["documentation", "governance", "standard"]
+status: STABLE
+last_audited: "2026-02-20"
+authoritative_source: "README.md"
+version: 1.0.0
 ---
-
 # NizamIQ Unified Documentation Standard (UDS)
 
 **STATUS:** DRAFT
