@@ -1,0 +1,98 @@
+---
+id: documentation-standard-phase-04-ecosystem-wide-enforcement
+title: "Phase 04: Ecosystem-Wide UDS Enforcement & Compliance Reporting"
+description: "Enforce the Unified Documentation Standard (UDS) across all 13 active repositories via automated CI checks, generate a compliance report, and establish a documentation health dashboard."
+last_audited: "2026-02-21"
+status: PENDING
+authoritative_source: docs/planning/phases/phase_04_ecosystem_wide_enforcement.yaml
+version: 1.0.0
+tags: ["documentation-standard", "uds", "compliance", "ci", "ecosystem", "enforcement"]
+---
+
+phase_id: "04"
+name: "Ecosystem_Wide_UDS_Enforcement_and_Compliance_Reporting"
+description: >
+  Enforce the Unified Documentation Standard (UDS) across all 13 active
+  repositories via automated CI checks, generate a compliance report, and
+  establish a documentation health dashboard. Phase 03 implemented automated
+  enforcement tooling — this phase deploys it ecosystem-wide.
+dependencies: ["03"]
+ecosystem_dependencies:
+  - repo: nizamiq/nizamiq-strategy
+    phase: phase_03_technical_layer
+    relationship: "nizamiq-strategy Phase 03 must complete individual project docs before UDS compliance can be measured."
+status: PENDING
+
+steps:
+  - id: "04.1"
+    title: "Deploy UDS linting CI workflow to all 13 active repositories"
+    status: PENDING
+    description: >
+      Add the UDS doc-lint GitHub Actions workflow to all 13 active repositories
+      that don't already have it. The workflow must:
+      - Run on push and pull_request to main
+      - Check YAML frontmatter in all .md files (id, title, status, last_audited)
+      - Check phase YAML files for required fields (id, title, status, steps)
+      - Fail the build if any document violates the UDS
+      Use the documentation-standard linting scripts as the enforcement engine.
+    verification_method: "for repo in Aegis Atlas Recce anchorlink meridian KubeClaw Cornerstone Fireside nizamiq.com nizamiq-methodology gateway-config zitadel-config nizamiq-strategy; do gh workflow list --repo nizamiq/$repo | grep -c 'doc-lint'; done"
+    proof_of_work: ""
+
+  - id: "04.2"
+    title: "Generate ecosystem-wide UDS compliance report"
+    status: PENDING
+    description: >
+      Run the UDS linter against all 13 repositories and generate a compliance
+      report at docs/reports/uds_compliance_report.md:
+      - Per-repository compliance score (% of documents passing)
+      - List of failing documents per repository
+      - Trend over time (compare to previous report)
+      - Recommendations for each non-compliant repository
+    verification_method: "test -f docs/reports/uds_compliance_report.md && wc -l docs/reports/uds_compliance_report.md"
+    proof_of_work: ""
+
+  - id: "04.3"
+    title: "Establish documentation health dashboard"
+    status: PENDING
+    description: >
+      Create a documentation health dashboard as a static HTML page at
+      docs/dashboard/index.html (or as a GitHub Pages site). Display:
+      - Per-repository UDS compliance score (green/yellow/red)
+      - Total documents, passing, failing
+      - Last updated timestamp
+      - Links to compliance reports
+      Auto-update the dashboard via CI on each linting run.
+    verification_method: "test -f docs/dashboard/index.html"
+    proof_of_work: ""
+
+  - id: "04.4"
+    title: "Update manifest.json to reflect Phase 04 COMPLETE"
+    status: PENDING
+    description: >
+      Update docs/planning/manifest.json: add phase_04 to completed_phases,
+      set current_phase to '04'.
+    verification_method: "python3 -c \"import json; d=json.load(open('docs/planning/manifest.json')); assert '04' in d.get('completed_phases',[])\""
+    proof_of_work: ""
+
+quality_controls:
+  - control: "UDS doc-lint workflow present in all 13 active repositories"
+    check_command: "for repo in Aegis Atlas Recce anchorlink meridian KubeClaw Cornerstone Fireside nizamiq.com nizamiq-methodology gateway-config zitadel-config nizamiq-strategy; do gh workflow list --repo nizamiq/$repo | grep -c 'doc-lint'; done"
+    result: PENDING
+  - control: "Compliance report covers all 13 repositories"
+    check_command: "grep -c 'Aegis\\|Atlas\\|Recce\\|anchorlink\\|meridian\\|KubeClaw\\|Cornerstone\\|Fireside\\|nizamiq.com\\|nizamiq-methodology\\|gateway-config\\|zitadel-config\\|nizamiq-strategy' docs/reports/uds_compliance_report.md"
+    result: PENDING
+  - control: "Dashboard renders correctly in browser"
+    check_command: "test -f docs/dashboard/index.html"
+    result: PENDING
+
+completion_criteria:
+  - "UDS doc-lint workflow deployed to all 13 active repositories"
+  - "Ecosystem-wide compliance report generated"
+  - "Documentation health dashboard established"
+  - "manifest.json updated: phase 04 in completed_phases"
+
+notes: |
+  The UDS enforcement is a quality gate — it should not block PRs in the first week.
+  Start in 'warn' mode and switch to 'fail' mode after repositories have had time to comply.
+  The compliance report should be generated weekly and committed to the repository.
+  The dashboard is a key artifact for the operator — it provides ecosystem health at a glance.

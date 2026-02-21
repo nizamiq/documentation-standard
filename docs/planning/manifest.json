@@ -19,7 +19,8 @@
     "00": "./docs/planning/phases/phase_00_init.yaml",
     "01": "./docs/planning/phases/phase_01_uds_definition.yaml",
     "02": "./docs/planning/phases/phase_02_ecosystem_migration.yaml",
-    "03": "./docs/planning/phases/phase_03_automated_enforcement.yaml"
+    "03": "./docs/planning/phases/phase_03_automated_enforcement.yaml",
+    "04": "./docs/planning/phases/phase_04_ecosystem_wide_enforcement.yaml"
   },
   "ecosystem_context": {
     "masterplan": "https://github.com/nizamiq/nizamiq-strategy",
@@ -48,5 +49,5 @@
     "last_modified": "2026-02-20",
     "last_modified_by": "Manus AI"
   },
-  "next_phase": "02"
+  "next_phase": "04"
 }
