@@ -14,18 +14,22 @@ version: 1.0.0
 
 ## ⚠️ MANDATORY SCOPE CHECK — READ BEFORE ACTING
 
-> **This repository is part of the NizamIQ Masterplan execution scope.**
+> **This repository is part of the NizamIQ ecosystem.**
 >
 > Before performing any work in any session, you **must** verify that the repository you are working on is listed as **in-scope** in the canonical ecosystem scope document:
 >
 > - **Human-readable:** [`nizamiq-strategy/SCOPE.md`](https://github.com/nizamiq/nizamiq-strategy/blob/main/SCOPE.md)
 > - **Machine-readable:** [`nizamiq-strategy/ECOSYSTEM.json`](https://github.com/nizamiq/nizamiq-strategy/blob/main/ECOSYSTEM.json)
 >
-> **If a repository is not listed as `in_scope` in `ECOSYSTEM.json`, do not perform any work on it.** Treat it as out of scope by default.
+> **If a repository is not listed as `in_scope` or `incubating` in `ECOSYSTEM.json`, do not perform any work on it.** Treat it as out of scope by default.
 >
-> The current in-scope repositories are: `nizamiq-strategy`, `nizamiq.com`, `nizamiq-methodology`, `anchorlink`, `meridian`, `Fireside`, `Cornerstone`, `KubeClaw`, `Recce`, `Atlas`, `Aegis`, `gateway-config`, `documentation-standard`.
+> **Active in-scope repositories:** `nizamiq-strategy`, `nizamiq.com`, `nizamiq-methodology`, `anchorlink`, `meridian`, `Fireside`, `Cornerstone`, `KubeClaw`, `Recce`, `Atlas`, `Aegis`, `gateway-config`, `documentation-standard`
 >
-> Explicitly **out of scope**: `sputnik-gateway` and any repository not listed above.
+> **Incubating repositories (governance setup only, no phase execution without operator authorization):** `autonomous-product-studio`, `Axiom`
+>
+> **Reference only (read-only, no modifications):** `nizamiq-website`, `meridian-prime`
+>
+> **Explicitly out of scope:** `sputnik-gateway` and any repository not listed above.
 
 ---
 
