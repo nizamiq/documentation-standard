@@ -1,3 +1,19 @@
+---
+authoritative_source: DEBT.md
+description: Technical debt and gap register for the documentation-standard project,
+  derived from the February 2026 ecosystem audit.
+id: documentation-standard-debt
+last_audited: '2026-02-22'
+status: IN_REVIEW
+tags:
+- documentation-standard
+- debt
+- audit
+- knowledge-preservation
+title: Debt
+version: 1.0.0
+---
+
 # documentation-standard: Technical Debt & Audit Gap Register
 
 This document tracks the technical debt and audit-identified gaps for the documentation-standard project.
