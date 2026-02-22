@@ -1,0 +1,90 @@
+name: Codex Code Review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  codex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v5
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+
+      - name: Run Codex review
+        id: codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review.md
+          sandbox: read-only
+          codex-args: --full-auto
+
+      - name: Parse severity summary
+        id: severity
+        shell: bash
+        env:
+          CODEX_FINAL_MESSAGE: ${{ steps.codex.outputs.final_message }}
+        run: |
+          set -euo pipefail
+          msg="$CODEX_FINAL_MESSAGE"
+          if [ -z "$msg" ]; then
+            echo "Empty Codex output; treating as no findings."
+            echo "blockers=0" >> "$GITHUB_OUTPUT"
+            echo "major=0" >> "$GITHUB_OUTPUT"
+            echo "minor=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "$msg" > /tmp/codex_output.md
+          get_val() {
+            echo "$msg" | sed -n "s/^$1:[[:space:]]*//p" | head -1
+          }
+          blockers=$(get_val "BLOCKERS")
+          major=$(get_val "MAJOR")
+          minor=$(get_val "MINOR")
+          # If parsing failed, treat as blockers
+          if [ -z "$blockers" ] || [ -z "$major" ] || [ -z "$minor" ]; then
+            echo "Parsing failed; treating as BLOCKERS=1"
+            blockers=1
+            major=0
+            minor=0
+          fi
+          echo "blockers=$blockers" >> "$GITHUB_OUTPUT"
+          echo "major=$major" >> "$GITHUB_OUTPUT"
+          echo "minor=$minor" >> "$GITHUB_OUTPUT"
+
+      - name: Gate on severity
+        shell: bash
+        run: |
+          blockers=${{ steps.severity.outputs.blockers }}
+          major=${{ steps.severity.outputs.major }}
+          # Policy: fail if blockers > 0 or major >= 3
+          if [ "$blockers" -gt 0 ] || [ "$major" -ge 3 ]; then
+            echo "Codex gate failed: blockers=$blockers major=$major"
+            exit 1
+          fi
+
+      - name: Post Codex review
+        if: steps.codex.outputs.final_message != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const body = process.env.CODEX_FINAL_MESSAGE;
+            const blockers = Number(process.env.CODEX_BLOCKERS || 0);
+            const major = Number(process.env.CODEX_MAJOR || 0);
+            const event = (blockers > 0 || major >= 3) ? "REQUEST_CHANGES" : "COMMENT";
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event,
+              body,
+            });
+        env:
+          CODEX_FINAL_MESSAGE: ${{ steps.codex.outputs.final_message }}
+          CODEX_BLOCKERS: ${{ steps.severity.outputs.blockers }}
+          CODEX_MAJOR: ${{ steps.severity.outputs.major }}
