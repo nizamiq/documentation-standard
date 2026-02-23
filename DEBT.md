@@ -10,7 +10,7 @@ tags:
 - debt
 - audit
 - knowledge-preservation
-title: Debt
+title: Technical Debt & Gap Register
 version: 1.0.0
 ---
 
